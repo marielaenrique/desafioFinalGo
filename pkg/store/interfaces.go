@@ -8,4 +8,9 @@ type StoreInterface interface {
 	UpdateOdontologo(id int, odontologo domain.Odontologo) error
 	PatchOdontologo(id int, odontologo domain.Odontologo) error
 	DeleteOdontologo(id int) error
+	ReadPaciente(id int) (*domain.Paciente, error)
+	CreatePaciente(paciente domain.Paciente) error
+	UpdatePaciente(id int, paciente domain.Paciente) error
+	PatchPaciente(id int, paciente domain.Paciente) error
+	DeletePaciente(id int) error
 }
