@@ -19,9 +19,10 @@ func main() {
 	}
 
 	storage := store.NewSqlStore(bd)
-	repository := odontologo.NewRepository(storage)
-	service := odontologo.NewService(repository)
-	odontologoHandler := handler.NewOdontologoHandler(service)
+
+	repositoryOdontologos := odontologo.NewRepository(storage)
+	serviceOdontologos := odontologo.NewService(repositoryOdontologos)
+	odontologoHandler := handler.NewOdontologoHandler(serviceOdontologos)
 
 	r := gin.Default()
 
@@ -30,6 +31,8 @@ func main() {
 		odontologos.GET(":id", odontologoHandler.GetByID())
 		odontologos.POST("", odontologoHandler.Post())
 		odontologos.PUT(":id", odontologoHandler.Put())
+		odontologos.PATCH(":id", odontologoHandler.Patch())
+		odontologos.DELETE(":id", odontologoHandler.Delete())
 	}
 
 	r.Run(":8080")

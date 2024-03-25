@@ -76,3 +76,53 @@ func (h *OdontologoHandler) Put() gin.HandlerFunc {
 		web.SuccessResponse(c, 200, o)
 	}
 }
+
+func (h *OdontologoHandler) Patch() gin.HandlerFunc {
+	type Request struct {
+		Nombre    string `json:"nombre,omitempty"`
+		Apellido  string `json:"apellido,omitempty"`
+		Matricula int    `json:"matricula,omitempty"`
+	}
+	return func(c *gin.Context) {
+		var r Request
+		idParam := c.Param("id")
+		id, err := strconv.Atoi(idParam)
+		if err != nil {
+			web.FailureResponse(c, 400, errors.New("Id inválido"))
+			return
+		}
+		err = c.ShouldBindJSON(&r)
+		if err != nil {
+			web.FailureResponse(c, 400, errors.New("JSON inválido"))
+			return
+		}
+		odontologoUpdated := domain.Odontologo{
+			Nombre:    r.Nombre,
+			Apellido:  r.Apellido,
+			Matricula: r.Matricula,
+		}
+		o, err := h.s.Patch(id, odontologoUpdated)
+		if err != nil {
+			web.FailureResponse(c, 400, err)
+			return
+		}
+		web.SuccessResponse(c, 200, o)
+	}
+}
+
+func (h *OdontologoHandler) Delete() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		idParam := c.Param("id")
+		id, err := strconv.Atoi(idParam)
+		if err != nil {
+			web.FailureResponse(c, 400, errors.New("Id inválido"))
+			return
+		}
+		err = h.s.Delete(id)
+		if err != nil {
+			web.FailureResponse(c, 400, err)
+			return
+		}
+		web.SuccessResponse(c, 204, nil)
+	}
+}

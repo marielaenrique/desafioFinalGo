@@ -6,6 +6,8 @@ type IService interface {
 	GetByID(id int) (*domain.Odontologo, error)
 	Create(odontologo domain.Odontologo) (domain.Odontologo, error)
 	Update(id int, odontologo domain.Odontologo) (domain.Odontologo, error)
+	Patch(id int, odontologo domain.Odontologo) (domain.Odontologo, error)
+	Delete(id int) error
 }
 
 type Service struct {
@@ -38,4 +40,20 @@ func (s *Service) Update(id int, odontologo domain.Odontologo) (domain.Odontolog
 		return domain.Odontologo{}, err
 	}
 	return o, nil
+}
+
+func (s *Service) Patch(id int, odontologo domain.Odontologo) (domain.Odontologo, error) {
+	o, err := s.r.Patch(id, odontologo)
+	if err != nil {
+		return domain.Odontologo{}, err
+	}
+	return o, nil
+}
+
+func (s *Service) Delete(id int) error {
+	err := s.r.Delete(id)
+	if err != nil {
+		return err
+	}
+	return nil
 }
