@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"desafioFinalGo/cmd/server/handler"
 	"desafioFinalGo/internal/odontologo"
+	"desafioFinalGo/internal/paciente"
 	"desafioFinalGo/pkg/store"
 	"log"
 
@@ -36,4 +37,19 @@ func main() {
 	}
 
 	r.Run(":8080")
+
+	repositoryPacientes := paciente.NewRepository(storage)
+	servicePacientes := paciente.NewService(repositoryPacientes)
+	pacienteHandler := handler.NewPacienteHandler(servicePacientes)
+	
+	pacientes := r.Group("/pacientes")
+	{
+		pacientes.GET(":id", pacienteHandler.GetByID())
+		pacientes.POST("", pacienteHandler.Post())
+		pacientes.PUT(":id", pacienteHandler.Put())
+		pacientes.PATCH(":id", pacienteHandler.Patch())
+		pacientes.DELETE(":id", pacienteHandler.Delete())
+		
+	}
+
 }
