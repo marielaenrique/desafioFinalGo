@@ -1,0 +1,10 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Esta API Handle Odontologos, Pacientes and Turnos",
+        "title": "Desafio Go Backend 3",
+        "contact": {},
+        "version": "1.0"
+    },
+    "paths": {}
+}
