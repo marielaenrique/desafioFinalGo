@@ -22,14 +22,14 @@ func (s *SqlStore) ReadOdontologo(id int) (*domain.Odontologo, error) {
 	var turnosData sql.NullString
 	query := "SELECT * FROM odontologos WHERE id = ?;"
 	row := s.db.QueryRow(query, id)
-	err := row.Scan(&odontologo.Id, &odontologo.Nombre, &odontologo.Apellido, &odontologo.Matricula, &odontologo.turnosData)
+	err := row.Scan(&odontologo.Id, &odontologo.Nombre, &odontologo.Apellido, &odontologo.Matricula, &turnosData)
 	if err != nil {
 		return nil, err
 	}
 	if turnosData.Valid {
-	if err := json.Unmarshal([]byte(turnosData.String), &odontologo.Turnos); err != nil {
-	return nil, err
-	}
+		if err := json.Unmarshal([]byte(turnosData.String), &odontologo.Turnos); err != nil {
+			return nil, err
+		}
 	}
 	return &odontologo, nil
 }
@@ -142,8 +142,6 @@ func (s SqlStore) DeleteOdontologo(id int) error {
 
 }
 
-// Pacientes 
-
 func (s *SqlStore) ReadPaciente(id int) (*domain.Paciente, error) {
 	var paciente domain.Paciente
 
@@ -187,7 +185,7 @@ func (s *SqlStore) UpdatePaciente(id int, paciente domain.Paciente) error {
 		log.Fatal(err)
 	}
 
-	res, err := stmt.Exec(paciente.Nombre, paciente.Apellido, paciente.Domicilio,paciente.DNI, paciente.AltaSistema, id)
+	res, err := stmt.Exec(paciente.Nombre, paciente.Apellido, paciente.Domicilio, paciente.DNI, paciente.AltaSistema, id)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -207,7 +205,7 @@ func (s *SqlStore) PatchPaciente(id int, paciente domain.Paciente) error {
 	query1 := "SELECT * FROM pacientes WHERE id = ?;"
 
 	row := s.db.QueryRow(query1, id)
-	err := row.Scan(&p.Id, &p.Nombre, &p.Apellido, &p.Domicilio,&p.DNI, &p.AltaSistema)
+	err := row.Scan(&p.Id, &p.Nombre, &p.Apellido, &p.Domicilio, &p.DNI, &p.AltaSistema)
 	if err != nil {
 		return err
 	}
@@ -220,13 +218,13 @@ func (s *SqlStore) PatchPaciente(id int, paciente domain.Paciente) error {
 	}
 	if paciente.Domicilio != "" {
 		p.Domicilio = paciente.Domicilio
-	}	
+	}
 	if paciente.DNI != 0 {
 		p.DNI = paciente.DNI
 	}
 	if paciente.AltaSistema != "" {
 		p.AltaSistema = paciente.AltaSistema
-	}	
+	}
 	query2 := "UPDATE pacientes SET nombre = ?, apellido = ?, domicilio = ?, dni = ?, altasistema = ? WHERE id = ?"
 
 	stmt, err := s.db.Prepare(query2)
