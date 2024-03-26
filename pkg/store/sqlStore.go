@@ -3,6 +3,7 @@ package store
 import (
 	"database/sql"
 	"desafioFinalGo/internal/domain"
+	"encoding/json"
 	"log"
 )
 
@@ -138,17 +139,24 @@ func (s SqlStore) DeleteOdontologo(id int) error {
 
 }
 
-// Pacientes 
+// Pacientes
 
 func (s *SqlStore) ReadPaciente(id int) (*domain.Paciente, error) {
 	var paciente domain.Paciente
+	var turnosData sql.NullString
 
 	query := "SELECT * FROM pacientes WHERE id = ?;"
 
 	row := s.db.QueryRow(query, id)
-	err := row.Scan(&paciente.Id, &paciente.Nombre, &paciente.Apellido, &paciente.Domicilio, &paciente.DNI, &paciente.AltaSistema)
+	err := row.Scan(&paciente.Id, &paciente.Nombre, &paciente.Apellido, &paciente.Domicilio, &paciente.DNI, &paciente.AltaSistema, &turnosData)
 	if err != nil {
 		return nil, err
+	}
+
+	if turnosData.Valid {
+		if err := json.Unmarshal([]byte(turnosData.String), &paciente.Turnos); err != nil {
+			return nil, err
+		}
 	}
 
 	return &paciente, nil
@@ -183,7 +191,7 @@ func (s *SqlStore) UpdatePaciente(id int, paciente domain.Paciente) error {
 		log.Fatal(err)
 	}
 
-	res, err := stmt.Exec(paciente.Nombre, paciente.Apellido, paciente.Domicilio,paciente.DNI, paciente.AltaSistema, id)
+	res, err := stmt.Exec(paciente.Nombre, paciente.Apellido, paciente.Domicilio, paciente.DNI, paciente.AltaSistema, id)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -200,10 +208,10 @@ func (s *SqlStore) PatchPaciente(id int, paciente domain.Paciente) error {
 
 	var p domain.Paciente
 
-	query1 := "SELECT * FROM pacientes WHERE id = ?;"
+	query1 := "SELECT id, nombre, apellido, domicilio, dni, altasistema FROM pacientes WHERE id = ?;"
 
 	row := s.db.QueryRow(query1, id)
-	err := row.Scan(&p.Id, &p.Nombre, &p.Apellido, &p.Domicilio,&p.DNI, &p.AltaSistema)
+	err := row.Scan(&p.Id, &p.Nombre, &p.Apellido, &p.Domicilio, &p.DNI, &p.AltaSistema)
 	if err != nil {
 		return err
 	}
@@ -216,13 +224,13 @@ func (s *SqlStore) PatchPaciente(id int, paciente domain.Paciente) error {
 	}
 	if paciente.Domicilio != "" {
 		p.Domicilio = paciente.Domicilio
-	}	
+	}
 	if paciente.DNI != 0 {
 		p.DNI = paciente.DNI
 	}
 	if paciente.AltaSistema != "" {
 		p.AltaSistema = paciente.AltaSistema
-	}	
+	}
 	query2 := "UPDATE pacientes SET nombre = ?, apellido = ?, domicilio = ?, dni = ?, altasistema = ? WHERE id = ?"
 
 	stmt, err := s.db.Prepare(query2)

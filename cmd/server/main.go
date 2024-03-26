@@ -25,6 +25,10 @@ func main() {
 	serviceOdontologos := odontologo.NewService(repositoryOdontologos)
 	odontologoHandler := handler.NewOdontologoHandler(serviceOdontologos)
 
+	repositoryPacientes := paciente.NewRepository(storage)
+	servicePacientes := paciente.NewService(repositoryPacientes)
+	pacienteHandler := handler.NewPacienteHandler(servicePacientes)
+
 	r := gin.Default()
 
 	odontologos := r.Group("/odontologos")
@@ -36,12 +40,6 @@ func main() {
 		odontologos.DELETE(":id", odontologoHandler.Delete())
 	}
 
-	r.Run(":8080")
-
-	repositoryPacientes := paciente.NewRepository(storage)
-	servicePacientes := paciente.NewService(repositoryPacientes)
-	pacienteHandler := handler.NewPacienteHandler(servicePacientes)
-	
 	pacientes := r.Group("/pacientes")
 	{
 		pacientes.GET(":id", pacienteHandler.GetByID())
@@ -49,7 +47,9 @@ func main() {
 		pacientes.PUT(":id", pacienteHandler.Put())
 		pacientes.PATCH(":id", pacienteHandler.Patch())
 		pacientes.DELETE(":id", pacienteHandler.Delete())
-		
+
 	}
+
+	r.Run(":8080")
 
 }
