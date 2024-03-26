@@ -23,4 +23,5 @@ type TurnoStoreInterface interface {
 	CreateTurno(turno domain.Turno) (domain.Turno, error)
 	UpdateTurno(id int, turno domain.Turno) (domain.Turno, error)
 	PatchTurno(id int, turno domain.Turno) (domain.Turno, error)
+	DeleteTurno(id int) error
 }

@@ -11,6 +11,7 @@ type IRepository interface {
 	Create(turno domain.Turno) (domain.Turno, error)
 	Update(id int, turno domain.Turno) (domain.Turno, error)
 	Patch(id int, turno domain.Turno) (domain.Turno, error)
+	Delete(id int) error
 }
 
 type Repository struct {
@@ -52,4 +53,12 @@ func (r *Repository) Patch(id int, turno domain.Turno) (domain.Turno, error) {
 		return domain.Turno{}, errors.New("Error actualizando turno")
 	}
 	return t, nil
+}
+
+func (r *Repository) Delete(id int) error {
+	err := r.storage.DeleteTurno(id)
+	if err != nil {
+		return err
+	}
+	return nil
 }

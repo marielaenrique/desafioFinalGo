@@ -160,6 +160,41 @@ func (s *SqlStore) PatchTurno(id int, turno domain.Turno) (domain.Turno, error) 
 
 }
 
+func (s *SqlStore) DeleteTurno(id int) error {
+
+	query1 := "SELECT pacienteId, odontologoId FROM turnos WHERE id = ?"
+	row := s.db.QueryRow(query1, id)
+
+	var pacienteID, odontologoID int
+
+	err := row.Scan(&pacienteID, &odontologoID)
+	if err != nil {
+		return err
+	}
+
+	query2 := "DELETE FROM turnos WHERE id = ?"
+	stmt, err := s.db.Prepare(query2)
+	if err != nil {
+		return err
+	}
+	_, err = stmt.Exec(id)
+	if err != nil {
+		return err
+	}
+
+	err = s.deleteTurnoPaciente(pacienteID, id)
+	if err != nil {
+		return err
+	}
+
+	err = s.deleteTurnoOdontologo(odontologoID, id)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (s *SqlStore) updateTurnoPaciente(pacienteID int, turno domain.Turno) error {
 
 	paciente, err := s.ReadPaciente(pacienteID)
@@ -219,6 +254,62 @@ func (s *SqlStore) updateTurnoOdontologo(odontologoID int, turno domain.Turno) e
 			PacienteId:   turno.PacienteId,
 			OdontologoId: turno.OdontologoId,
 		})
+
+	turnosJSON, err := json.Marshal(odontologo.Turnos)
+	if err != nil {
+		return err
+	}
+
+	query := "UPDATE odontologos SET turnos = ? WHERE id = ?"
+	_, err = s.db.Exec(query, string(turnosJSON), odontologoID)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (s *SqlStore) deleteTurnoPaciente(pacienteID, turnoID int) error {
+
+	paciente, err := s.ReadPaciente(pacienteID)
+	if err != nil {
+		return err
+	}
+
+	for i, t := range paciente.Turnos {
+		if t.Id == turnoID {
+			paciente.Turnos = append(paciente.Turnos[:i], paciente.Turnos[i+1:]...)
+			break
+		}
+	}
+
+	turnosJSON, err := json.Marshal(paciente.Turnos)
+	if err != nil {
+		return err
+	}
+
+	query := "UPDATE pacientes SET turnos = ? WHERE id = ?"
+	_, err = s.db.Exec(query, string(turnosJSON), pacienteID)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (s *SqlStore) deleteTurnoOdontologo(odontologoID, turnoID int) error {
+
+	odontologo, err := s.ReadOdontologo(odontologoID)
+	if err != nil {
+		return err
+	}
+
+	for i, t := range odontologo.Turnos {
+		if t.Id == turnoID {
+			odontologo.Turnos = append(odontologo.Turnos[:i], odontologo.Turnos[i+1:]...)
+			break
+		}
+	}
 
 	turnosJSON, err := json.Marshal(odontologo.Turnos)
 	if err != nil {

@@ -62,6 +62,7 @@ func main() {
 		turnos.POST("", turnoHandler.Post())
 		turnos.PUT(":id", turnoHandler.Put())
 		turnos.PATCH(":id", turnoHandler.Patch())
+		turnos.DELETE(":id", turnoHandler.Delete())
 	}
 
 	r.Run(":8080")

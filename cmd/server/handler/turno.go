@@ -114,3 +114,20 @@ func (h *TurnoHandler) Patch() gin.HandlerFunc {
 		web.SuccessResponse(c, 200, t)
 	}
 }
+
+func (h *TurnoHandler) Delete() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		idParam := c.Param("id")
+		id, err := strconv.Atoi(idParam)
+		if err != nil {
+			web.FailureResponse(c, 400, errors.New("Id inválido"))
+			return
+		}
+		err = h.s.Delete(id)
+		if err != nil {
+			web.FailureResponse(c, 400, err)
+			return
+		}
+		web.SuccessResponse(c, 204, nil)
+	}
+}
