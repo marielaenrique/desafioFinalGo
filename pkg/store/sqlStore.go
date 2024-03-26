@@ -3,6 +3,7 @@ package store
 import (
 	"database/sql"
 	"desafioFinalGo/internal/domain"
+	"encoding/json"
 	"log"
 )
 
@@ -21,12 +22,15 @@ func (s *SqlStore) ReadOdontologo(id int) (*domain.Odontologo, error) {
 	var turnosData sql.NullString
 	query := "SELECT * FROM odontologos WHERE id = ?;"
 	row := s.db.QueryRow(query, id)
-	err := row.Scan(&odontologo.Id, &odontologo.Nombre, &odontologo.Apellido, &odontologo.Matricula)
-
+	err := row.Scan(&odontologo.Id, &odontologo.Nombre, &odontologo.Apellido, &odontologo.Matricula, &odontologo.turnosData)
 	if err != nil {
 		return nil, err
 	}
-
+	if turnosData.Valid {
+	if err := json.Unmarshal([]byte(turnosData.String), &odontologo.Turnos); err != nil {
+	return nil, err
+	}
+	}
 	return &odontologo, nil
 }
 
@@ -76,7 +80,7 @@ func (s *SqlStore) PatchOdontologo(id int, odontologo domain.Odontologo) error {
 
 	var o domain.Odontologo
 
-	query1 := "SELECT * FROM odontologos WHERE id = ?;"
+	query1 := "SELECT id, nombre, apellido, matricula FROM odontologos WHERE id = ?;"
 
 	row := s.db.QueryRow(query1, id)
 	err := row.Scan(&o.Id, &o.Nombre, &o.Apellido, &o.Matricula)
