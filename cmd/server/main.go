@@ -12,6 +12,10 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
+// @title Desafio Go Backend 3
+// @version 1.0
+// @description Esta API Handle Odontologos, Pacientes and Turnos
+
 func main() {
 
 	bd, err := sql.Open("mysql", "root:root@tcp(localhost:3306)/turnos-odontologia")
@@ -47,9 +51,7 @@ func main() {
 		pacientes.PUT(":id", pacienteHandler.Put())
 		pacientes.PATCH(":id", pacienteHandler.Patch())
 		pacientes.DELETE(":id", pacienteHandler.Delete())
-
 	}
 
 	r.Run(":8080")
-
 }
