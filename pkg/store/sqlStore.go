@@ -22,14 +22,14 @@ func (s *SqlStore) ReadOdontologo(id int) (*domain.Odontologo, error) {
 	var turnosData sql.NullString
 	query := "SELECT * FROM odontologos WHERE id = ?;"
 	row := s.db.QueryRow(query, id)
-	err := row.Scan(&odontologo.Id, &odontologo.Nombre, &odontologo.Apellido, &odontologo.Matricula, &odontologo.turnosData)
+	err := row.Scan(&odontologo.Id, &odontologo.Nombre, &odontologo.Apellido, &odontologo.Matricula, &turnosData)
 	if err != nil {
 		return nil, err
 	}
 	if turnosData.Valid {
-	if err := json.Unmarshal([]byte(turnosData.String), &odontologo.Turnos); err != nil {
-	return nil, err
-	}
+		if err := json.Unmarshal([]byte(turnosData.String), &odontologo.Turnos); err != nil {
+			return nil, err
+		}
 	}
 	return &odontologo, nil
 }
@@ -141,8 +141,6 @@ func (s SqlStore) DeleteOdontologo(id int) error {
 	return nil
 
 }
-
-// Pacientes
 
 func (s *SqlStore) ReadPaciente(id int) (*domain.Paciente, error) {
 	var paciente domain.Paciente

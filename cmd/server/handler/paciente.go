@@ -79,8 +79,8 @@ func (h *PacienteHandler) Put() gin.HandlerFunc {
 
 func (h *PacienteHandler) Patch() gin.HandlerFunc {
 	type Request struct {
-		Nombre    string `json:"nombre,omitempty"`
-		Apellido  string `json:"apellido,omitempty"`
+		Nombre      string `json:"nombre,omitempty"`
+		Apellido    string `json:"apellido,omitempty"`
 		Domicilio   string `json:"domicilio,omitempty"`
 		DNI         int    `json:"dni,omitempty"`
 		AltaSistema string `json:"altasistema,omitempty"`
@@ -99,11 +99,11 @@ func (h *PacienteHandler) Patch() gin.HandlerFunc {
 			return
 		}
 		pacienteUpdated := domain.Paciente{
-			Nombre:   r.Nombre,
-			Apellido: r.Apellido,
-			Domicilio:     r.Domicilio,
-			DNI:     r.DNI,
-			AltaSistema:     r.AltaSistema,
+			Nombre:      r.Nombre,
+			Apellido:    r.Apellido,
+			Domicilio:   r.Domicilio,
+			DNI:         r.DNI,
+			AltaSistema: r.AltaSistema,
 		}
 		p, err := h.s.Patch(id, pacienteUpdated)
 		if err != nil {
