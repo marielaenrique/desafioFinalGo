@@ -19,9 +19,8 @@ type PacienteStoreInterface interface {
 }
 
 type TurnoStoreInterface interface {
-	CreateTurno(turno domain.Turno) (domain.Turno, error)
 	ReadTurno(id int) (*domain.Turno, error)
+	CreateTurno(turno domain.Turno) (domain.Turno, error)
 	UpdateTurno(id int, turno domain.Turno) (domain.Turno, error)
-	UpdateOneTurno(id int, turno domain.Turno) (domain.Turno, error)
-	DeleteTurno(id int) error
+	PatchTurno(id int, turno domain.Turno) (domain.Turno, error)
 }
