@@ -18,11 +18,11 @@ func NewSqlStore(db *sql.DB) StoreInterface {
 
 func (s *SqlStore) ReadOdontologo(id int) (*domain.Odontologo, error) {
 	var odontologo domain.Odontologo
-
+	var turnosData sql.NullString
 	query := "SELECT * FROM odontologos WHERE id = ?;"
-
 	row := s.db.QueryRow(query, id)
 	err := row.Scan(&odontologo.Id, &odontologo.Nombre, &odontologo.Apellido, &odontologo.Matricula)
+
 	if err != nil {
 		return nil, err
 	}
