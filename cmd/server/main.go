@@ -5,6 +5,7 @@ import (
 	"desafioFinalGo/cmd/server/handler"
 	"desafioFinalGo/internal/odontologo"
 	"desafioFinalGo/internal/paciente"
+	"desafioFinalGo/internal/turno"
 	"desafioFinalGo/pkg/store"
 	"log"
 
@@ -29,6 +30,10 @@ func main() {
 	servicePacientes := paciente.NewService(repositoryPacientes)
 	pacienteHandler := handler.NewPacienteHandler(servicePacientes)
 
+	repositoryTurnos := turno.NewRepository(storage)
+	serviceTurnos := turno.NewService(repositoryTurnos)
+	turnoHandler := handler.NewTurnoHandler(serviceTurnos)
+
 	r := gin.Default()
 
 	odontologos := r.Group("/odontologos")
@@ -48,6 +53,15 @@ func main() {
 		pacientes.PATCH(":id", pacienteHandler.Patch())
 		pacientes.DELETE(":id", pacienteHandler.Delete())
 
+	}
+
+	turnos := r.Group("/turnos")
+	{
+
+		turnos.GET(":id", turnoHandler.GetByID())
+		turnos.POST("", turnoHandler.Post())
+		turnos.PUT(":id", turnoHandler.Put())
+		turnos.PATCH(":id", turnoHandler.Patch())
 	}
 
 	r.Run(":8080")
