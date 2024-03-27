@@ -195,6 +195,28 @@ func (s *SqlStore) DeleteTurno(id int) error {
 	return nil
 }
 
+func (s *SqlStore) CreateTurnoDniMatricula(turno domain.Turno, dniPaciente int, matriculaOdontologo int) (domain.Turno, error) {
+
+	var t domain.Turno
+
+	paciente, err := s.getPacienteDNI(dniPaciente)
+	if err != nil {
+		return domain.Turno{}, err
+	}
+
+	odontologo, err := s.getOdontologoMatricula(matriculaOdontologo)
+	if err != nil {
+		return domain.Turno{}, err
+	}
+
+	t.Descripcion = turno.Descripcion
+	t.FechaHora = turno.FechaHora
+	t.PacienteId = paciente.Id
+	t.OdontologoId = odontologo.Id
+
+	return s.CreateTurno(t)
+}
+
 func (s *SqlStore) updateTurnoPaciente(pacienteID int, turno domain.Turno) error {
 
 	paciente, err := s.ReadPaciente(pacienteID)
@@ -323,4 +345,32 @@ func (s *SqlStore) deleteTurnoOdontologo(odontologoID, turnoID int) error {
 	}
 
 	return nil
+}
+
+func (s *SqlStore) getPacienteDNI(dni int) (domain.Paciente, error) {
+
+	var paciente domain.Paciente
+
+	query := "SELECT id, nombre, dni FROM pacientes WHERE dni = ?"
+	row := s.db.QueryRow(query, dni)
+	err := row.Scan(&paciente.Id, &paciente.Nombre, &paciente.DNI)
+	if err != nil {
+		return domain.Paciente{}, err
+	}
+
+	return paciente, nil
+}
+
+func (s *SqlStore) getOdontologoMatricula(matricula int) (domain.Odontologo, error) {
+
+	var odontologo domain.Odontologo
+
+	query := "SELECT id, nombre, matricula FROM odontologos WHERE matricula = ?"
+	row := s.db.QueryRow(query, matricula)
+	err := row.Scan(&odontologo.Id, &odontologo.Nombre, &odontologo.Matricula)
+	if err != nil {
+		return domain.Odontologo{}, err
+	}
+
+	return odontologo, nil
 }

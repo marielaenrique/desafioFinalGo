@@ -24,4 +24,5 @@ type TurnoStoreInterface interface {
 	UpdateTurno(id int, turno domain.Turno) (domain.Turno, error)
 	PatchTurno(id int, turno domain.Turno) (domain.Turno, error)
 	DeleteTurno(id int) error
+	CreateTurnoDniMatricula(turno domain.Turno, dniPaciente int, matriculaOdontologo int) (domain.Turno, error)
 }

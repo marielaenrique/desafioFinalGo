@@ -8,6 +8,7 @@ type IService interface {
 	Update(id int, turno domain.Turno) (domain.Turno, error)
 	Patch(id int, turno domain.Turno) (domain.Turno, error)
 	Delete(id int) error
+	CreateTurnoDniMatricula(turno domain.Turno, dniPaciente int, matriculaOdontologo int) (domain.Turno, error)
 }
 
 type Service struct {
@@ -57,4 +58,13 @@ func (s *Service) Delete(id int) error {
 		return err
 	}
 	return nil
+}
+
+func (s *Service) CreateTurnoDniMatricula(turno domain.Turno, dniPaciente int, matriculaOdontologo int) (domain.Turno, error) {
+
+	t, err := s.r.CreateTurnoDniMatricula(turno, dniPaciente, matriculaOdontologo)
+	if err != nil {
+		return domain.Turno{}, err
+	}
+	return t, nil
 }

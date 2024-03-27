@@ -12,6 +12,7 @@ type IRepository interface {
 	Update(id int, turno domain.Turno) (domain.Turno, error)
 	Patch(id int, turno domain.Turno) (domain.Turno, error)
 	Delete(id int) error
+	CreateTurnoDniMatricula(turno domain.Turno, dniPaciente int, matriculaOdontologo int) (domain.Turno, error)
 }
 
 type Repository struct {
@@ -61,4 +62,12 @@ func (r *Repository) Delete(id int) error {
 		return err
 	}
 	return nil
+}
+
+func (r *Repository) CreateTurnoDniMatricula(turno domain.Turno, dniPaciente int, matriculaOdontologo int) (domain.Turno, error) {
+	t, err := r.storage.CreateTurnoDniMatricula(turno, dniPaciente, matriculaOdontologo)
+	if err != nil {
+		return domain.Turno{}, errors.New("Error al crear un nuevo turno")
+	}
+	return t, nil
 }
