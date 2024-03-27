@@ -18,6 +18,31 @@ definitions:
     - matricula
     - nombre
     type: object
+  domain.Paciente:
+    properties:
+      altasistema:
+        type: string
+      apellido:
+        type: string
+      dni:
+        type: integer
+      domicilio:
+        type: string
+      id:
+        type: integer
+      nombre:
+        type: string
+      turnos:
+        items:
+          $ref: '#/definitions/domain.Turno'
+        type: array
+    required:
+    - altasistema
+    - apellido
+    - dni
+    - domicilio
+    - nombre
+    type: object
   domain.Turno:
     properties:
       descripcion:
@@ -33,8 +58,15 @@ definitions:
     required:
     - descripcion
     - fechaHora
-    - odontologoId
-    - pacienteId
+    type: object
+  handler.Request:
+    properties:
+      apellido:
+        type: string
+      matricula:
+        type: integer
+      nombre:
+        type: string
     type: object
 info:
   contact: {}
@@ -43,7 +75,97 @@ info:
   version: "1.0"
 paths:
   /odontologos/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Elimina un odontólogo existente por su ID.
+      parameters:
+      - description: ID del odontólogo a eliminar
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: Odontólogo eliminado
+          schema:
+            type: string
+        "400":
+          description: ID inválido
+          schema:
+            type: string
+        "404":
+          description: Odontólogo no encontrado
+          schema:
+            type: string
+      summary: Eliminar odontólogo por ID
+      tags:
+      - Odontologos
     get:
+      consumes:
+      - application/json
+      description: Obtiene un turno por su id
+      parameters:
+      - description: ID del turno
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Turno'
+        "400":
+          description: ID inválido
+          schema:
+            type: string
+        "404":
+          description: Turno no encontrado
+          schema:
+            type: string
+      summary: Obtener turno por id
+      tags:
+      - Turnos
+    patch:
+      consumes:
+      - application/json
+      description: Actualiza un odontólogo existente por su ID.
+      parameters:
+      - description: ID del odontólogo a actualizar
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Datos del odontólogo a actualizar (campos opcionales)
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handler.Request'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Odontólogo actualizado
+          schema:
+            $ref: '#/definitions/domain.Odontologo'
+        "400":
+          description: ID inválido o JSON inválido
+          schema:
+            type: string
+        "404":
+          description: Odontólogo no encontrado
+          schema:
+            type: string
+      summary: Actualizar odontólogo por ID
+      tags:
+      - Odontologos
+    post:
       consumes:
       - application/json
       description: Obtiene un odontólogo por su id
@@ -61,14 +183,298 @@ paths:
           schema:
             $ref: '#/definitions/domain.Odontologo'
         "400":
-          description: ID inválido
+          description: Json invalido
+          schema:
+            type: string
+        "404":
+          description: Json invalido
+          schema:
+            type: string
+      summary: Obtener odontólogo por id
+      tags:
+      - Odontologos
+    put:
+      consumes:
+      - application/json
+      description: Actualiza un odontólogo existente por su ID.
+      parameters:
+      - description: ID del odontólogo a actualizar
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Datos del odontólogo a actualizar
+        in: body
+        name: odontologo
+        required: true
+        schema:
+          $ref: '#/definitions/domain.Odontologo'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Odontólogo actualizado
+          schema:
+            $ref: '#/definitions/domain.Odontologo'
+        "400":
+          description: ID inválido o JSON inválido
           schema:
             type: string
         "404":
           description: Odontólogo no encontrado
           schema:
             type: string
-      summary: Obtener odontólogo por id
+      summary: Actualizar odontólogo por ID
       tags:
       - Odontologos
+  /pacientes/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Elimina un paciente existente por su ID.
+      parameters:
+      - description: ID del paciente a eliminar
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: Paciente eliminado
+          schema:
+            type: string
+        "400":
+          description: ID inválido
+          schema:
+            type: string
+        "404":
+          description: Paciente no encontrado
+          schema:
+            type: string
+      summary: Eliminar paciente por ID
+      tags:
+      - Pacientes
+    get:
+      consumes:
+      - application/json
+      description: Obtiene un paciente por su id
+      parameters:
+      - description: ID del paciente
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Paciente'
+        "400":
+          description: Json invalido
+          schema:
+            type: string
+        "404":
+          description: Json invalido
+          schema:
+            type: string
+      summary: Obtener paciente por id
+      tags:
+      - Pacientes
+    patch:
+      consumes:
+      - application/json
+      description: Actualiza un paciente existente por su ID.
+      parameters:
+      - description: ID del paciente a actualizar
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Datos del paciente a actualizar (campos opcionales)
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handler.Request'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Paciente actualizado
+          schema:
+            $ref: '#/definitions/domain.Paciente'
+        "400":
+          description: ID inválido o JSON inválido
+          schema:
+            type: string
+        "404":
+          description: Paciente no encontrado
+          schema:
+            type: string
+      summary: Actualizar paciente por ID
+      tags:
+      - Pacientes
+    put:
+      consumes:
+      - application/json
+      description: Actualiza un paciente existente por su ID.
+      parameters:
+      - description: ID del paciente a actualizar
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Datos del odontólogo a actualizar
+        in: body
+        name: odontologo
+        required: true
+        schema:
+          $ref: '#/definitions/domain.Paciente'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Odontólogo actualizado
+          schema:
+            $ref: '#/definitions/domain.Paciente'
+        "400":
+          description: ID inválido o JSON inválido
+          schema:
+            type: string
+        "404":
+          description: Paciente no encontrado
+          schema:
+            type: string
+      summary: Actualizar paciente por ID
+      tags:
+      - Pacientes
+  /turnos/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Elimina un turno existente por su ID.
+      parameters:
+      - description: ID del turno a eliminar
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: Turno eliminado
+          schema:
+            type: string
+        "400":
+          description: ID inválido
+          schema:
+            type: string
+        "404":
+          description: Turno no encontrado
+          schema:
+            type: string
+      summary: Eliminar turno por ID
+      tags:
+      - Turnos
+    get:
+      consumes:
+      - application/json
+      description: Obtiene un turno por su id
+      parameters:
+      - description: ID del turno
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Turno'
+        "400":
+          description: JSON inválido
+          schema:
+            type: string
+        "404":
+          description: Turno no encontrado
+          schema:
+            type: string
+      summary: Obtener turno por id
+      tags:
+      - Turnos
+    patch:
+      consumes:
+      - application/json
+      description: Actualiza un turno existente por su ID.
+      parameters:
+      - description: ID del turno a actualizar
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Datos del turno a actualizar (campos opcionales)
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handler.Request'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Turno actualizado
+          schema:
+            $ref: '#/definitions/domain.Turno'
+        "400":
+          description: ID inválido o JSON inválido
+          schema:
+            type: string
+        "404":
+          description: Turno no encontrado
+          schema:
+            type: string
+      summary: Actualizar turno por ID
+      tags:
+      - Turnos
+    put:
+      consumes:
+      - application/json
+      description: Actualiza un turno existente por su ID.
+      parameters:
+      - description: ID del turno a actualizar
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Datos del turno a actualizar
+        in: body
+        name: turno
+        required: true
+        schema:
+          $ref: '#/definitions/domain.Turno'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Turno actualizado
+          schema:
+            $ref: '#/definitions/domain.Turno'
+        "400":
+          description: ID inválido o JSON inválido
+          schema:
+            type: string
+        "404":
+          description: Turno no encontrado
+          schema:
+            type: string
+      summary: Actualizar turno por ID
+      tags:
+      - Turnos
 swagger: "2.0"

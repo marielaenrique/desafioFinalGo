@@ -10,6 +10,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+type Request struct {
+	Nombre    string `json:"nombre,omitempty"`
+	Apellido  string `json:"apellido,omitempty"`
+	Matricula int    `json:"matricula,omitempty"`
+}
+
 type OdontologoHandler struct {
 	s odontologo.IService
 }
@@ -56,7 +62,7 @@ func (h *OdontologoHandler) GetByID() gin.HandlerFunc {
 // @Success 200 {object} domain.Odontologo
 // @Failure 400 {string} string "Json invalido"
 // @Failure 404 {string} string "Json invalido"
-// @Router /odontologos/{id} [get]
+// @Router /odontologos/{id} [post]
 func (h *OdontologoHandler) Post() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var odontologo domain.Odontologo
@@ -108,6 +114,7 @@ func (h *OdontologoHandler) Put() gin.HandlerFunc {
 		web.SuccessResponse(c, 200, o)
 	}
 }
+
 // Patch actualiza un odontólogo por su ID.
 // @Summary Actualizar odontólogo por ID
 // @Description Actualiza un odontólogo existente por su ID.
@@ -121,11 +128,7 @@ func (h *OdontologoHandler) Put() gin.HandlerFunc {
 // @Failure 404 {string} string "Odontólogo no encontrado"
 // @Router /odontologos/{id} [Patch]
 func (h *OdontologoHandler) Patch() gin.HandlerFunc {
-	type Request struct {
-		Nombre    string `json:"nombre,omitempty"`
-		Apellido  string `json:"apellido,omitempty"`
-		Matricula int    `json:"matricula,omitempty"`
-	}
+
 	return func(c *gin.Context) {
 		var r Request
 		idParam := c.Param("id")

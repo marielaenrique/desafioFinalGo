@@ -17,6 +17,99 @@ const docTemplate = `{
     "paths": {
         "/odontologos/{id}": {
             "get": {
+                "description": "Obtiene un turno por su id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Turnos"
+                ],
+                "summary": "Obtener turno por id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID del turno",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Turno"
+                        }
+                    },
+                    "400": {
+                        "description": "ID inválido",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Turno no encontrado",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Actualiza un odontólogo existente por su ID.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Odontologos"
+                ],
+                "summary": "Actualizar odontólogo por ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID del odontólogo a actualizar",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Datos del odontólogo a actualizar",
+                        "name": "odontologo",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/domain.Odontologo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Odontólogo actualizado",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Odontologo"
+                        }
+                    },
+                    "400": {
+                        "description": "ID inválido o JSON inválido",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Odontólogo no encontrado",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "post": {
                 "description": "Obtiene un odontólogo por su id",
                 "consumes": [
                     "application/json"
@@ -45,6 +138,48 @@ const docTemplate = `{
                         }
                     },
                     "400": {
+                        "description": "Json invalido",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Json invalido",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Elimina un odontólogo existente por su ID.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Odontologos"
+                ],
+                "summary": "Eliminar odontólogo por ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID del odontólogo a eliminar",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Odontólogo eliminado",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
                         "description": "ID inválido",
                         "schema": {
                             "type": "string"
@@ -52,6 +187,433 @@ const docTemplate = `{
                     },
                     "404": {
                         "description": "Odontólogo no encontrado",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "description": "Actualiza un odontólogo existente por su ID.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Odontologos"
+                ],
+                "summary": "Actualizar odontólogo por ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID del odontólogo a actualizar",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Datos del odontólogo a actualizar (campos opcionales)",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/handler.Request"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Odontólogo actualizado",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Odontologo"
+                        }
+                    },
+                    "400": {
+                        "description": "ID inválido o JSON inválido",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Odontólogo no encontrado",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/pacientes/{id}": {
+            "get": {
+                "description": "Obtiene un paciente por su id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Pacientes"
+                ],
+                "summary": "Obtener paciente por id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID del paciente",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Paciente"
+                        }
+                    },
+                    "400": {
+                        "description": "Json invalido",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Json invalido",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Actualiza un paciente existente por su ID.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Pacientes"
+                ],
+                "summary": "Actualizar paciente por ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID del paciente a actualizar",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Datos del odontólogo a actualizar",
+                        "name": "odontologo",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/domain.Paciente"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Odontólogo actualizado",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Paciente"
+                        }
+                    },
+                    "400": {
+                        "description": "ID inválido o JSON inválido",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Paciente no encontrado",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Elimina un paciente existente por su ID.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Pacientes"
+                ],
+                "summary": "Eliminar paciente por ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID del paciente a eliminar",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Paciente eliminado",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "ID inválido",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Paciente no encontrado",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "description": "Actualiza un paciente existente por su ID.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Pacientes"
+                ],
+                "summary": "Actualizar paciente por ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID del paciente a actualizar",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Datos del paciente a actualizar (campos opcionales)",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/handler.Request"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Paciente actualizado",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Paciente"
+                        }
+                    },
+                    "400": {
+                        "description": "ID inválido o JSON inválido",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Paciente no encontrado",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/turnos/{id}": {
+            "get": {
+                "description": "Obtiene un turno por su id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Turnos"
+                ],
+                "summary": "Obtener turno por id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID del turno",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Turno"
+                        }
+                    },
+                    "400": {
+                        "description": "JSON inválido",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Turno no encontrado",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Actualiza un turno existente por su ID.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Turnos"
+                ],
+                "summary": "Actualizar turno por ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID del turno a actualizar",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Datos del turno a actualizar",
+                        "name": "turno",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/domain.Turno"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Turno actualizado",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Turno"
+                        }
+                    },
+                    "400": {
+                        "description": "ID inválido o JSON inválido",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Turno no encontrado",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Elimina un turno existente por su ID.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Turnos"
+                ],
+                "summary": "Eliminar turno por ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID del turno a eliminar",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Turno eliminado",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "ID inválido",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Turno no encontrado",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "description": "Actualiza un turno existente por su ID.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Turnos"
+                ],
+                "summary": "Actualizar turno por ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID del turno a actualizar",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Datos del turno a actualizar (campos opcionales)",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/handler.Request"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Turno actualizado",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Turno"
+                        }
+                    },
+                    "400": {
+                        "description": "ID inválido o JSON inválido",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Turno no encontrado",
                         "schema": {
                             "type": "string"
                         }
@@ -89,13 +651,47 @@ const docTemplate = `{
                 }
             }
         },
+        "domain.Paciente": {
+            "type": "object",
+            "required": [
+                "altasistema",
+                "apellido",
+                "dni",
+                "domicilio",
+                "nombre"
+            ],
+            "properties": {
+                "altasistema": {
+                    "type": "string"
+                },
+                "apellido": {
+                    "type": "string"
+                },
+                "dni": {
+                    "type": "integer"
+                },
+                "domicilio": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "nombre": {
+                    "type": "string"
+                },
+                "turnos": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/domain.Turno"
+                    }
+                }
+            }
+        },
         "domain.Turno": {
             "type": "object",
             "required": [
                 "descripcion",
-                "fechaHora",
-                "odontologoId",
-                "pacienteId"
+                "fechaHora"
             ],
             "properties": {
                 "descripcion": {
@@ -112,6 +708,20 @@ const docTemplate = `{
                 },
                 "pacienteId": {
                     "type": "integer"
+                }
+            }
+        },
+        "handler.Request": {
+            "type": "object",
+            "properties": {
+                "apellido": {
+                    "type": "string"
+                },
+                "matricula": {
+                    "type": "integer"
+                },
+                "nombre": {
+                    "type": "string"
                 }
             }
         }
