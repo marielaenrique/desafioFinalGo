@@ -20,14 +20,16 @@ func NewOdontologoHandler(s odontologo.IService) *OdontologoHandler {
 	}
 }
 
-// ListProducts godoc
-// @Summary List products
-// @Tags Products
-// @Description get products
+// @Summary Obtener odontólogo por id
+// @Description Obtiene un odontólogo por su id
+// @Tags Odontologos
 // @Accept json
 // @Produce json
-// @Param token header string true "token"
-// @Router /products [get]
+// @Param id path int true "ID del odontólogo"
+// @Success 200 {object} domain.Odontologo
+// @Failure 400 {string} string "ID inválido"
+// @Failure 404 {string} string "Odontólogo no encontrado"
+// @Router /odontologos/{id} [get]
 func (h *OdontologoHandler) GetByID() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		idParam := c.Param("id")

@@ -1,7 +1,74 @@
+definitions:
+  domain.Odontologo:
+    properties:
+      apellido:
+        type: string
+      id:
+        type: integer
+      matricula:
+        type: integer
+      nombre:
+        type: string
+      turnos:
+        items:
+          $ref: '#/definitions/domain.Turno'
+        type: array
+    required:
+    - apellido
+    - matricula
+    - nombre
+    type: object
+  domain.Turno:
+    properties:
+      descripcion:
+        type: string
+      fechaHora:
+        type: string
+      id:
+        type: integer
+      odontologoId:
+        type: integer
+      pacienteId:
+        type: integer
+    required:
+    - descripcion
+    - fechaHora
+    - odontologoId
+    - pacienteId
+    type: object
 info:
   contact: {}
-  description: Esta API Handle Odontologos, Pacientes and Turnos
-  title: Desafio Go Backend 3
+  description: Esta API maneja Odontólogos, Pacientes y Turnos
+  title: Desafío Go Backend 3
   version: "1.0"
-paths: {}
+paths:
+  /odontologos/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Obtiene un odontólogo por su id
+      parameters:
+      - description: ID del odontólogo
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Odontologo'
+        "400":
+          description: ID inválido
+          schema:
+            type: string
+        "404":
+          description: Odontólogo no encontrado
+          schema:
+            type: string
+      summary: Obtener odontólogo por id
+      tags:
+      - Odontologos
 swagger: "2.0"

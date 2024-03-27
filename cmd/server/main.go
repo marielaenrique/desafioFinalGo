@@ -18,9 +18,9 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
-// @title Desafio Go Backend 3
+// @title Desafío Go Backend 3
 // @version 1.0
-// @description Esta API maneja Odontologos, Pacientes y Turnos
+// @description Esta API maneja Odontólogos, Pacientes y Turnos
 func main() {
 
 	bd, err := sql.Open("mysql", "root:root@tcp(localhost:3306)/turnos-odontologia")
