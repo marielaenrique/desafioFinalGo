@@ -82,6 +82,7 @@ func main() {
 		turnos.PUT(":id", middleware.Authentication(), turnoHandler.Put())
 		turnos.PATCH(":id", middleware.Authentication(), turnoHandler.Patch())
 		turnos.DELETE(":id", middleware.Authentication(), turnoHandler.Delete())
+		turnos.POST("/dni", middleware.Authentication(), turnoHandler.PostDniMatricula())
 	}
 
 	r.Run(":8080")

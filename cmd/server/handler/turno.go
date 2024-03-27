@@ -131,3 +131,34 @@ func (h *TurnoHandler) Delete() gin.HandlerFunc {
 		web.SuccessResponse(c, 204, nil)
 	}
 }
+
+func (h *TurnoHandler) PostDniMatricula() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		var turno domain.Turno
+
+		dniPaciente, err := strconv.Atoi(c.Query("dni"))
+		if err != nil {
+			web.FailureResponse(c, 400, errors.New("Dni debe ser un número entero"))
+			return
+		}
+
+		matriculaOdontologo, err := strconv.Atoi(c.Query("matricula"))
+		if err != nil {
+			web.FailureResponse(c, 400, errors.New("Matrícula debe ser un número entero"))
+			return
+		}
+
+		err = c.ShouldBindJSON(&turno)
+		if err != nil {
+			web.FailureResponse(c, 400, errors.New("JSON inválido"))
+			return
+		}
+
+		t, err := h.s.CreateTurnoDniMatricula(turno, dniPaciente, matriculaOdontologo)
+		if err != nil {
+			web.FailureResponse(c, 400, err)
+			return
+		}
+		web.SuccessResponse(c, 200, t)
+	}
+}
