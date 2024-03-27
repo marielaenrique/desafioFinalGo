@@ -162,3 +162,21 @@ func (h *TurnoHandler) PostDniMatricula() gin.HandlerFunc {
 		web.SuccessResponse(c, 200, t)
 	}
 }
+
+func (h *TurnoHandler) GetByDni() gin.HandlerFunc {
+	return func(c *gin.Context) {
+
+		dniPaciente, err := strconv.Atoi(c.Query("dni"))
+		if err != nil {
+			web.FailureResponse(c, 400, errors.New("Dni debe ser un número entero"))
+			return
+		}
+
+		turno, err := h.s.GetTurnoByDni(dniPaciente)
+		if err != nil {
+			web.FailureResponse(c, 404, errors.New("Turno no encontrado"))
+			return
+		}
+		web.SuccessResponse(c, 200, &turno)
+	}
+}

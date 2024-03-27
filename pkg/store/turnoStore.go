@@ -217,6 +217,22 @@ func (s *SqlStore) CreateTurnoDniMatricula(turno domain.Turno, dniPaciente int, 
 	return s.CreateTurno(t)
 }
 
+func (s *SqlStore) ReadTurnoByDni(dni int) (*domain.Turno, error) {
+	var turno domain.Turno
+	query := `
+        SELECT t.id, t.descripcion, t.fechaHora, t.pacienteId, t.odontologoId
+        FROM turnos t
+        JOIN pacientes p ON t.pacienteId = p.id
+        WHERE p.dni = ?;
+		`
+	row := s.db.QueryRow(query, dni)
+	err := row.Scan(&turno.Id, &turno.Descripcion, &turno.FechaHora, &turno.PacienteId, &turno.OdontologoId)
+	if err != nil {
+		return nil, err
+	}
+	return &turno, nil
+}
+
 func (s *SqlStore) updateTurnoPaciente(pacienteID int, turno domain.Turno) error {
 
 	paciente, err := s.ReadPaciente(pacienteID)
