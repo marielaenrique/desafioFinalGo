@@ -47,6 +47,16 @@ func (h *OdontologoHandler) GetByID() gin.HandlerFunc {
 	}
 }
 
+// @Summary Obtener odontólogo por id
+// @Description Obtiene un odontólogo por su id
+// @Tags Odontologos
+// @Accept json
+// @Produce json
+// @Param id path int true "ID del odontólogo"
+// @Success 200 {object} domain.Odontologo
+// @Failure 400 {string} string "Json invalido"
+// @Failure 404 {string} string "Json invalido"
+// @Router /odontologos/{id} [get]
 func (h *OdontologoHandler) Post() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var odontologo domain.Odontologo
@@ -64,6 +74,18 @@ func (h *OdontologoHandler) Post() gin.HandlerFunc {
 	}
 }
 
+// Put actualiza un odontólogo por su ID.
+// @Summary Actualizar odontólogo por ID
+// @Description Actualiza un odontólogo existente por su ID.
+// @Tags Odontologos
+// @Accept json
+// @Produce json
+// @Param id path int true "ID del odontólogo a actualizar"
+// @Param odontologo body domain.Odontologo true "Datos del odontólogo a actualizar"
+// @Success 200 {object} domain.Odontologo "Odontólogo actualizado"
+// @Failure 400 {string} string "ID inválido o JSON inválido"
+// @Failure 404 {string} string "Odontólogo no encontrado"
+// @Router /odontologos/{id} [put]
 func (h *OdontologoHandler) Put() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		idParam := c.Param("id")
@@ -86,7 +108,18 @@ func (h *OdontologoHandler) Put() gin.HandlerFunc {
 		web.SuccessResponse(c, 200, o)
 	}
 }
-
+// Patch actualiza un odontólogo por su ID.
+// @Summary Actualizar odontólogo por ID
+// @Description Actualiza un odontólogo existente por su ID.
+// @Tags Odontologos
+// @Accept json
+// @Produce json
+// @Param id path int true "ID del odontólogo a actualizar"
+// @Param request body Request true "Datos del odontólogo a actualizar (campos opcionales)"
+// @Success 200 {object} domain.Odontologo "Odontólogo actualizado"
+// @Failure 400 {string} string "ID inválido o JSON inválido"
+// @Failure 404 {string} string "Odontólogo no encontrado"
+// @Router /odontologos/{id} [Patch]
 func (h *OdontologoHandler) Patch() gin.HandlerFunc {
 	type Request struct {
 		Nombre    string `json:"nombre,omitempty"`
@@ -120,6 +153,17 @@ func (h *OdontologoHandler) Patch() gin.HandlerFunc {
 	}
 }
 
+// Delete elimina un odontólogo por su ID.
+// @Summary Eliminar odontólogo por ID
+// @Description Elimina un odontólogo existente por su ID.
+// @Tags Odontologos
+// @Accept json
+// @Produce json
+// @Param id path int true "ID del odontólogo a eliminar"
+// @Success 204 {string} string "Odontólogo eliminado"
+// @Failure 400 {string} string "ID inválido"
+// @Failure 404 {string} string "Odontólogo no encontrado"
+// @Router /odontologos/{id} [delete]
 func (h *OdontologoHandler) Delete() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		idParam := c.Param("id")
