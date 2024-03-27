@@ -78,10 +78,10 @@ func main() {
 	{
 
 		turnos.GET(":id", turnoHandler.GetByID())
-		turnos.POST("", turnoHandler.Post())
-		turnos.PUT(":id", turnoHandler.Put())
-		turnos.PATCH(":id", turnoHandler.Patch())
-		turnos.DELETE(":id", turnoHandler.Delete())
+		turnos.POST("", middleware.Authentication(), turnoHandler.Post())
+		turnos.PUT(":id", middleware.Authentication(), turnoHandler.Put())
+		turnos.PATCH(":id", middleware.Authentication(), turnoHandler.Patch())
+		turnos.DELETE(":id", middleware.Authentication(), turnoHandler.Delete())
 	}
 
 	r.Run(":8080")
