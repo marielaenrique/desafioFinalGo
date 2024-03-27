@@ -10,17 +10,17 @@ import (
 	"log"
 	"os"
 
+	"desafioFinalGo/docs"
+
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
-	"github.com/swaggo/swag/example/basic/docs"
 )
 
 // @title Desafio Go Backend 3
 // @version 1.0
 // @description Esta API maneja Odontologos, Pacientes y Turnos
-
 func main() {
 
 	bd, err := sql.Open("mysql", "root:root@tcp(localhost:3306)/turnos-odontologia")
@@ -45,7 +45,8 @@ func main() {
 	r := gin.Default()
 
 	docs.SwaggerInfo.Host = os.Getenv("HOST")
-	r.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	r.GET("/docs/*any",
+		ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	odontologos := r.Group("/odontologos")
 	{

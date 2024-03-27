@@ -1,0 +1,24 @@
+info:
+  contact: {}
+  description: Esta API maneja Odontologos, Pacientes y Turnos
+  title: Desafio Go Backend 3
+  version: "1.0"
+paths:
+  /products:
+    get:
+      consumes:
+      - application/json
+      description: get products
+      parameters:
+      - description: token
+        in: header
+        name: token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      summary: List products
+      tags:
+      - Products
+swagger: "2.0"

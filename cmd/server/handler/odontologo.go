@@ -20,6 +20,14 @@ func NewOdontologoHandler(s odontologo.IService) *OdontologoHandler {
 	}
 }
 
+// ListProducts godoc
+// @Summary List products
+// @Tags Products
+// @Description get products
+// @Accept json
+// @Produce json
+// @Param token header string true "token"
+// @Router /products [get]
 func (h *OdontologoHandler) GetByID() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		idParam := c.Param("id")
