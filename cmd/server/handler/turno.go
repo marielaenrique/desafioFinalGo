@@ -20,6 +20,17 @@ func NewTurnoHandler(s turno.IService) *TurnoHandler {
 	}
 }
 
+
+// @Summary Obtener turno por id
+// @Description Obtiene un turno por su id
+// @Tags Turnos
+// @Accept json
+// @Produce json
+// @Param id path int true "ID del turno"
+// @Success 200 {object} domain.Turno
+// @Failure 400 {string} string "ID inválido"
+// @Failure 404 {string} string "Turno no encontrado"
+// @Router /odontologos/{id} [get]
 func (h *TurnoHandler) GetByID() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		idParam := c.Param("id")
@@ -37,6 +48,17 @@ func (h *TurnoHandler) GetByID() gin.HandlerFunc {
 	}
 }
 
+ 
+// @Summary Obtener turno por id
+// @Description Obtiene un turno por su id
+// @Tags Turnos
+// @Accept json
+// @Produce json
+// @Param id path int true "ID del turno"
+// @Success 200 {object} domain.Turno
+// @Failure 400 {string} string "JSON inválido"
+// @Failure 404 {string} string "Turno no encontrado"
+// @Router /turnos/{id} [get]
 func (h *TurnoHandler) Post() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var turno domain.Turno
@@ -57,6 +79,18 @@ func (h *TurnoHandler) Post() gin.HandlerFunc {
 
 }
 
+// Put actualiza un turno por su ID.
+// @Summary Actualizar turno por ID
+// @Description Actualiza un turno existente por su ID.
+// @Tags Turnos
+// @Accept json
+// @Produce json
+// @Param id path int true "ID del turno a actualizar"
+// @Param turno body domain.Turno true "Datos del turno a actualizar"
+// @Success 200 {object} domain.Turno "Turno actualizado"
+// @Failure 400 {string} string "ID inválido o JSON inválido"
+// @Failure 404 {string} string "Turno no encontrado"
+// @Router /turnos/{id} [put]
 func (h *TurnoHandler) Put() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		idParam := c.Param("id")
@@ -80,6 +114,18 @@ func (h *TurnoHandler) Put() gin.HandlerFunc {
 	}
 }
 
+// Patch actualiza un turno por su ID.
+// @Summary Actualizar turno por ID
+// @Description Actualiza un turno existente por su ID.
+// @Tags Turnos
+// @Accept json
+// @Produce json
+// @Param id path int true "ID del turno a actualizar"
+// @Param request body Request true "Datos del turno a actualizar (campos opcionales)"
+// @Success 200 {object} domain.Turno "Turno actualizado"
+// @Failure 400 {string} string "ID inválido o JSON inválido"
+// @Failure 404 {string} string "Turno no encontrado"
+// @Router /turnos/{id} [Patch]
 func (h *TurnoHandler) Patch() gin.HandlerFunc {
 	type Request struct {
 		Descripcion  string `json:"descripcion,omitempty"`
@@ -115,6 +161,17 @@ func (h *TurnoHandler) Patch() gin.HandlerFunc {
 	}
 }
 
+// Delete elimina un turno por su ID.
+// @Summary Eliminar turno por ID
+// @Description Elimina un turno existente por su ID.
+// @Tags Turnos
+// @Accept json
+// @Produce json
+// @Param id path int true "ID del turno a eliminar"
+// @Success 204 {string} string "Turno eliminado"
+// @Failure 400 {string} string "ID inválido"
+// @Failure 404 {string} string "Turno no encontrado"
+// @Router /turnos/{id} [delete]
 func (h *TurnoHandler) Delete() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		idParam := c.Param("id")
